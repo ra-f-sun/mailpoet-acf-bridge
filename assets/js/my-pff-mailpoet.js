@@ -84,3 +84,50 @@ jQuery(document).ready(function ($) {
   injectPffButtons();
   setInterval(injectPffButtons, 1000);
 });
+
+// Bulk selection function
+
+function injectBulkPffButton() {
+  var $bulkActions = jQuery(
+    '.mailpoet-listing-bulk-actions[data-automation-id="listing-bulk-actions"]'
+  );
+  if ($bulkActions.length && $bulkActions.find("#pff-bulk-btn").length === 0) {
+    // Place "Send All to PFF" button beside Move to trash
+    $bulkActions.append(
+      '<div><a href="#" id="pff-bulk-btn" class="button button-secondary" style="">Send All to PFF</a></div>'
+    );
+  }
+}
+
+// Only show the bulk button when one or more are selected
+function updateBulkBtnVisibility() {
+  var checked = jQuery('tbody input[type="checkbox"]:checked').not(
+    '[name="check_all"]'
+  );
+  if (checked.length > 0) {
+    jQuery("#pff-bulk-btn").show();
+  } else {
+    jQuery("#pff-bulk-btn").hide();
+  }
+}
+
+jQuery(document).ready(function ($) {
+  injectBulkPffButton();
+  setInterval(injectBulkPffButton, 1000); // Ensure it always exists even if DOM changes
+
+  // Show/hide on checklist changes
+  $(document).on(
+    "change",
+    'tbody input[type="checkbox"], thead input[type="checkbox"]',
+    updateBulkBtnVisibility
+  );
+
+  // Hide at start
+  $("#pff-bulk-btn").hide();
+
+  // Confirm basic working
+  $(document).on("click", "#pff-bulk-btn", function (e) {
+    e.preventDefault();
+    alert("Bulk Send All to PFF triggered!");
+  });
+});

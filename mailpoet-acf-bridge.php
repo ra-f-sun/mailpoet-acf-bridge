@@ -2,7 +2,7 @@
 /*
 Plugin Name: MailPoet ACF Bridge
 Description: Connects MailPoet admin with your ACF Newsletter post type and fields.
-Version: 1.0
+Version: 2.0
 Author: Rafsun Jani
 License: GPL2
 */
