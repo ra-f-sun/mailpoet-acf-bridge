@@ -1,13 +1,27 @@
 <?php
-/*
-Plugin Name: MailPoet ACF Bridge
-Description: Connects MailPoet to ACF newsletter post type, with single and bulk automation.
-Version: 2.0
-Author: Rafsun Jani
-License: GPL2
-*/
 
-// File includes
-require_once __DIR__ . '/includes/enqueue-admin.php';
-require_once __DIR__ . '/includes/ajax-single.php';
-require_once __DIR__ . '/includes/ajax-bulk.php';
+/**
+ * Script enqueue and AJAX nonce localization for MailPoet-ACF Bridge
+ *
+ * @package MailPoet-ACF-Bridge
+ */
+
+add_action('admin_enqueue_scripts', function ($hook) {
+    if (strpos($hook, 'mailpoet-newsletters') !== false) {
+        wp_enqueue_script(
+            'my-pff-mailpoet',
+            plugins_url('../assets/js/my-pff-mailpoet.js', __FILE__),
+            array('jquery'),
+            '1.0',
+            true
+        );
+        wp_localize_script(
+            'my-pff-mailpoet',
+            'pffAjax',
+            array(
+                'ajax_url' => admin_url('admin-ajax.php'),
+                'nonce'    => wp_create_nonce('pff_ajax_nonce')
+            )
+        );
+    }
+});
